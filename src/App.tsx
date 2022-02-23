@@ -1,26 +1,50 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Grid, Stack, TextField, Typography } from "@mui/material";
+import { Button } from "@mui/material";
+import { useState } from "react";
+const { REACT_APP_PASSWORD: AppPassword } = process.env;
 
-function App() {
+const App = () => {
+  const [password, setPassword] = useState<string>("");
+  const [error, setError] = useState<string>("");
+
+  const handleSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
+    e.preventDefault();
+    if (password === AppPassword) {
+      setError("");
+      /* 
+       Redirect Logic here
+      */
+      return;
+    }
+    return setError("Incorrect Password!");
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Grid
+      container
+      direction="row"
+      justifyContent="center"
+      alignItems="center"
+      height="100vh"
+    >
+      <Stack component="form" spacing={2} onSubmit={handleSubmit}>
+        <TextField
+          type="password"
+          label="Enter Password"
+          variant="outlined"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <Button size="large" variant="contained" type="submit">
+          Submit
+        </Button>
+
+        <Typography variant="subtitle1" align="center" sx={{ color: "tomato" }}>
+          {error}
+        </Typography>
+      </Stack>
+    </Grid>
   );
-}
+};
 
 export default App;
