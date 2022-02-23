@@ -1,22 +1,25 @@
 import { Grid, Stack, TextField, Typography } from "@mui/material";
 import { Button } from "@mui/material";
 import { useState } from "react";
-const { REACT_APP_PASSWORD: AppPassword } = process.env;
+import { useMutation } from "react-query";
+import checkPassword from "./api/checkPassword";
 
 const App = () => {
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string>("");
+  const { mutate } = useMutation(checkPassword, {
+    onError: () => setError("Incorrect Password"),
+    onSuccess: () => {
+      /* 
+        Rediect Logic goes here
+      */
+      setError("");
+    },
+  });
 
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
-    if (password === AppPassword) {
-      setError("");
-      /* 
-       Redirect Logic here
-      */
-      return;
-    }
-    return setError("Incorrect Password!");
+    mutate(password);
   };
 
   return (
